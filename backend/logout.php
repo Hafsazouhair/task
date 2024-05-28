@@ -1,19 +1,14 @@
 <?php
+// Start the session
 session_start();
 
-if (!isset($_SESSION['username']) || $_SESSION['role_type'] != 'admin') {
-    header("Location: login.php");
-    exit();
-}
+// Unset all of the session variables
+$_SESSION = array();
 
-echo "Welcome to the Admin Dashboard, " . $_SESSION['username'];
-// Add admin-specific functionality here
-?>
-
-<a href="logout.php">Logout</a>
-<?php
-session_start();
+// Destroy the session
 session_destroy();
+
+// Redirect the user to the home page
 header("Location: login.php");
-exit();
+exit; // Ensure that no further code is executed after the redirect
 ?>

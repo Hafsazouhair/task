@@ -1,6 +1,7 @@
 <?php
-session_start();
+
 require_once '../connexion.php';
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -23,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $row['username'];
             $_SESSION['role_type'] = $row['role_type'];
             $_SESSION['email'] = $row['email'];
-
+            $_SESSION['ID_user'] = $row['ID_user'];
             // Set cookies for user preferences (non-sensitive information)
             setcookie('username', $row['username'], time() + (86400 * 30), "/"); // 30 days
             // Commented out email cookie set line
@@ -32,9 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirect based on user role
             if ($row['role_type'] == 'admin') {
-                header("Location: dashboard.php");
+                header("Location: header.php");
             } else {
-                header("Location: index.php");
+                header("Location: header.php");
             }
             exit();
         } else {
@@ -54,20 +55,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Login</h1>
-    <form method="post" action="login.php">
-        <input type="email" name="email" id="email" placeholder="Email" required><br>
-        <input type="password" name="password" id="password" placeholder="Password" required><br>
-        <input type="submit" name="submit" value="Login"><br>
-    </form>
-    <h1>Or</h1>
-    <a href="register.php">Register</a>
+<body class="bg-gray-100  items-center justify-center h-screen">
+    
+<?php include './header.php' ?>
 
-    <!-- <h2>Check Stored Cookies</h2>
-    <p>Username Cookie: <?php echo isset($_COOKIE['username']) ? $_COOKIE['username'] : 'Not set'; ?></p>
-    <p>Email Cookie: <?php echo isset($_COOKIE['email']) ? $_COOKIE['email'] : 'Not set'; ?></p>
-    <p>Role Type Cookie: <?php echo isset($_COOKIE['role_type']) ? $_COOKIE['role_type'] : 'Not set'; ?></p> -->
+  <main class="flex flex-col items-center justify-center mt-20">
+      <div class="bg-white p-8 rounded shadow-md w-96 ">
+        <h1 class="text-2xl font-bold mb-4">Login</h1>
+        <form method="post" action="login.php">
+            <div class="mb-4">
+                <input type="email" name="email" id="email" placeholder="Email" required class="border border-gray-300 rounded-md w-full px-3 py-2">
+            </div>
+            <div class="mb-4">
+                <input type="password" name="password" id="password" placeholder="Password" required class="border border-gray-300 rounded-md w-full px-3 py-2">
+            </div>
+            <div class="mb-4">
+                <input type="submit" name="submit" value="Login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer">
+            </div>
+        </form>
+        <h1 class="text-xl font-bold mb-2">Or</h1>
+        <a href="register.php" class="text-blue-500 hover:underline">Register</a>
+    </div>
+</main>
 </body>
-</html>
+
